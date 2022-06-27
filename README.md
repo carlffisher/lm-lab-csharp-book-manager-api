@@ -48,4 +48,4 @@ to add in exception handling to the project?
 - Clue 1: What if someone wants to add a book with an ID for a book that already exists? How do we handle this gracefully?
 
 - Clue 2: What if someone wants to find a book by an ID that doesn't yet exist? 
-  How can we improve the API by handling errors gracefully and show a helpful message to the client?
+  How can we improve the API by handling errors gracefully and show a helpful message to the client?# lm-lab-csharp-book-manager-api
