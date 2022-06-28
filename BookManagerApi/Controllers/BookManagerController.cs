@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BookManagerApi.Models;
 using BookManagerApi.Services;
+using System.Net;
 
 namespace BookManagerApi.Controllers
 {
@@ -24,13 +25,15 @@ namespace BookManagerApi.Controllers
 
         // GET: api/v1/book/5
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Book> GetBookById(long id)
         {
             var book = _bookManagementService.FindBookById(id);
-            return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
-            // return book;
+            if (book != null)
+            {
+                return book;
+            }
+
+            return Result(HttpStatusCode.NotFound, $"Book id: {id} does not exist in database");
         }
 
         // PUT: api/v1/book/5
@@ -45,12 +48,15 @@ namespace BookManagerApi.Controllers
         // POST: api/v1/book
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
         public ActionResult<Book> AddBook(Book book)
         {
             _bookManagementService.Create(book);
+
+            if (_bookManagementService.BookExists(book.Id))
+            {
+                return Result(HttpStatusCode.NotFound, $"Book id: {book.Id} already exists");
+            }
+
             return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
         }
 
@@ -62,9 +68,13 @@ namespace BookManagerApi.Controllers
             var deletedbook =_bookManagementService.Remove(id, book);
 
             return deletedbook;
-
-            // return NoContent();
         }
 
+        public static ActionResult Result(HttpStatusCode statusCode, string reason) => new ContentResult
+        {
+            StatusCode = (int)statusCode,
+            Content = $"Status Code: {(int)statusCode} {statusCode}: {reason}",
+            ContentType = "text/plain",
+        };
     }
 }

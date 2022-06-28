@@ -1,4 +1,6 @@
 ﻿using BookManagerApi.Models;
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookManagerApi.Services
 {
@@ -48,12 +50,12 @@ namespace BookManagerApi.Services
         public Book FindBookById(long id)
         {
             var book = _context.Books.Find(id);
-            return book;
+            return book!;
         }
 
         public bool BookExists(long id)
         {
-            return _context.Books.Any(b => b.Id == id);
+            return _context.Books!.Any(b => b.Id == id);
         }
     }
 }
