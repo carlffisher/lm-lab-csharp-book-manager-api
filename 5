@@ -1,0 +1,47 @@
+📘 Discussion Task
+
+
+Discuss the gollowing features:
+
+- Get All Books
+- Add a Book
+- Update a Book
+
+
+
+GetAllBooks() is a method of the class BookManagementService.
+It is called as part of a test in BookManagerControllerTests to obtain a list books that mock the expected return from a test databse when the latter is asked to return a list of all books it contains.
+Thus, a test can compare the mock return list and the test database return list to confirm they match, which means the test is successful.
+BookManagement service class obtains this book list via a 'context', also created by BookManagementService, which is the interface that provides methods for an app to access data and operations it may require.
+
+
+AddBook() is a method of the class BookManagerController. The latter class descends from class ControllerBase, whick, I think, is implemented by AspNetCore?
+In this App, AddBook() is used by BookManagerControlTests to populate a test database. It takes as an argument type Book, which contains all the details of a book to be added to the test database.
+To create a new book, the method calls Create, which belongs to the context created by the BookManagementService.
+On returning the result of the Create, AddBook returns an Action Result, which supplies the added books name, id, and the Book struct.
+
+
+UpdateBookById() is a method also belonging to class BookManagerController. It takes as arguments a book id and a struct containing the details of the book to be updated.
+The method, in turn, calls Update, which belongs to the class BookManagementService, passing in the latter two arguments. 
+
+
+    In all, the following tests are implemented in BookManagerControllerTests.cs with error handling/messaging:
+
+    public void GetBooks_Returns_AllBooks()
+    public void GetBookById_Returns_CorrectBook()
+    public void UpdateBookById_Updates_Correct_Book()
+    public void AddBook_Creates_A_Book()
+    private static List<Book> GetTestBooks()
+    public void DeleteBookById_Deletes_Correct_Book()
+    public void GetBookById_Returns_NoBookExists()
+    public void AddBook_Creates_A_Book_That_Exists()
+
+
+
+
+
+
+
+
+
+

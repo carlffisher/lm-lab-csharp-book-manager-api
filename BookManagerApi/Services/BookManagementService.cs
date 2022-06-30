@@ -27,11 +27,21 @@ namespace BookManagerApi.Services
             return book;
         }
 
+        /*
         public Book Remove(long id, Book book)
         {
             _context.Remove(book);
             _context.SaveChanges();
             return book;
+        }
+        */
+
+        public Book Delete(long id)
+        {
+            var existingBookFound = FindBookById(id);
+            _context.Remove(_context.Books!.Single(b => b.Id.Equals(existingBookFound.Id)));
+            _context.SaveChanges();
+            return existingBookFound;
         }
 
         public Book UpdateBookById(long id, Book book)
@@ -51,6 +61,7 @@ namespace BookManagerApi.Services
         {
             var book = _context.Books.Find(id);
             return book!;
+
         }
 
         public bool BookExists(long id)

@@ -102,28 +102,29 @@ public class BookManagerControllerTests
     [Test]
     public void DeleteBookById_Deletes_Correct_Book()
     {
-        //Arrange
+                //Arrange
 
-        var newBook = new Book() { Id = 5, Title = "Book Five", Description = "This is the description for Book Five", Author = "Person Five", Genre = Genre.Education };
-        _mockBookManagementService!.Setup(b => b.Create(newBook)).Returns(newBook);
+                var newBook = new Book() { Id = 5, Title = "Book Five", Description = "This is the description for Book Five", Author = "Person Five", Genre = Genre.Education };
+                _mockBookManagementService!.Setup(b => b.Create(newBook)).Returns(newBook);
 
-        //Act
-        var result = _controller!.AddBook(newBook);
+                //Act
+                var result = _controller!.AddBook(newBook);
 
-        //Assert
-        result.Should().BeOfType(typeof(ActionResult<Book>));
+                //Assert
+                result.Should().BeOfType(typeof(ActionResult<Book>));
 
+                //Arrange
 
-        long existingBookId = 5;
-        Book existingBookFound = GetTestBooks().FirstOrDefault(b => b.Id.Equals(existingBookId))!;
+                long existingBookId = 5;
+                Book existingBookFound = GetTestBooks().FirstOrDefault(b => b.Id.Equals(existingBookId))!;
 
-        var bookUpdates = new Book() { Id = 5, Title = "Book Five", Description = "This is the description for Book Five", Author = "Person Five", Genre = Genre.Education };
+                var bookUpdates = new Book() { Id = 5, Title = "Book Five", Description = "This is the description for Book Five", Author = "Person Five", Genre = Genre.Education };
 
-        //Act
-        var result2 = _controller.DeleteBookById(existingBookId, bookUpdates);
+                //Act
+                var result2 = _controller!.DeleteBookById(existingBookId);
 
-        //Assert
-        result2.Should().BeOfType(typeof(ActionResult<Book>));
+                //Assert
+                result2.Should().BeOfType(typeof(ActionResult<Book>));
     }
 
    [Test]
@@ -137,9 +138,10 @@ public class BookManagerControllerTests
         Assert.NotNull(result);
         Assert.AreEqual($"Status Code: 404 NotFound: Book id: {existingBookId} does not exist in database", result!.Content);
    }
-    [Test]
-    public void AddBook_Creates_A_Book_That_Exists()
-    {
+
+   [Test]
+   public void AddBook_Creates_A_Book_That_Exists()
+   {
         long existingBookId = 1;
         _mockBookManagementService!.Setup(b => b.BookExists(existingBookId)).Returns(true);
 
@@ -147,5 +149,5 @@ public class BookManagerControllerTests
 
         Assert.NotNull(result);
         Assert.AreEqual($"Status Code: 400 BadRequest: Book id: {existingBookId} exists", result!.Content);
-    }
+   }
 }

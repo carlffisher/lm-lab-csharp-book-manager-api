@@ -50,6 +50,7 @@ namespace BookManagerApi.Controllers
         [HttpPost]
         public ActionResult<Book> AddBook(Book book)
         {
+            /*
             _bookManagementService.Create(book);
 
             if (_bookManagementService.BookExists(book.Id))
@@ -58,8 +59,19 @@ namespace BookManagerApi.Controllers
             }
 
             return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
+            */
+
+            if (_bookManagementService.BookExists(book.Id))
+            {
+                return Result(HttpStatusCode.NotFound, $"Book id: {book.Id} already exists");
+            }
+
+            _bookManagementService.Create(book);
+
+            return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
         }
 
+        /*
         // DELETE: api/v1/book/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpDelete("{id}")]
@@ -69,6 +81,15 @@ namespace BookManagerApi.Controllers
 
             return deletedbook;
         }
+        */
+
+        // DELETE: api/v1/book/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpDelete("{id}")]
+        public ActionResult<Book> DeleteBookById(long id) =>
+            _bookManagementService.Delete(id);
+
+
 
         public static ActionResult Result(HttpStatusCode statusCode, string reason) => new ContentResult
         {
